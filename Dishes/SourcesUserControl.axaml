@@ -1,0 +1,35 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dishes="clr-namespace:Dishes"
+             xmlns:properties="clr-namespace:Dishes.Properties"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Dishes.SourcesUserControl">
+  <Grid RowDefinitions="Auto,12,Auto,Auto,Auto,Auto,Auto,Auto,*,Auto" ColumnDefinitions="*,*">
+    <TextBlock Grid.Row="0" Grid.Column="0" Classes="Label" Text="Find"/>
+    <TextBox Grid.Row="0" Grid.Column="1" Classes="Property" Name="SearchBox"/>
+    <TextBlock Grid.Row="2" Grid.Column="0" Classes="Label" Text="Id"/>
+    <TextBlock Grid.Row="2" Grid.Column="1" Classes="Property" Name="EntityId"/>
+    <TextBlock Grid.Row="3" Grid.Column="0" Classes="Label" Text="Name"/>
+    <TextBox Grid.Row="3" Grid.Column="1" Classes="Property" Name="SourceName" />
+
+    <Button Grid.Row="7" Grid.Column="0" Name="Save" Content="{x:Static properties:Resources.Save}" HorizontalAlignment="Right" Margin="0 0 6 6" />
+    <Button Grid.Row="7" Grid.Column="1" Name="Cancel" Content="Cancel" Margin="0 0 0 6" />
+    <DataGrid Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"
+              Name="Entities" MinHeight="100" MinWidth="800"
+              VerticalScrollBarVisibility="Visible" IsReadOnly="True">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="Id"
+                            MinWidth="30"
+                            Binding="{Binding Id}" />
+        <DataGridTextColumn Header="Name"
+                            MinWidth="270"
+                            Binding="{Binding Name}" />
+      </DataGrid.Columns>
+    </DataGrid>
+    <Button Grid.Row="9" Grid.Column="1" Name="Delete" Content="Delete" HorizontalAlignment="Right" Margin="0 6 0 0" />
+
+  </Grid>
+
+</UserControl>
