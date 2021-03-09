@@ -31,5 +31,11 @@ namespace Dishes
             command.Parameters.AddWithValue("$name", source.Name);
             command.Parameters.AddWithValue("$id", source.Id);
         }
+
+        public static void AddAllPropertiesAsParameters(this SqliteCommand command, Tag tag)
+        {
+            command.Parameters.AddWithValue("$name", tag.Name);
+            command.Parameters.AddWithValue("$id", tag.Id);
+        }
     }
 }

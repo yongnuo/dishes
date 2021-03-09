@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
 
 namespace Dishes
@@ -18,13 +19,24 @@ namespace Dishes
             DishPath = this.FindControl<TextBox>("DishPath");
             DishComment = this.FindControl<TextBox>("DishComment");
             SelectedSource = this.FindControl<ComboBox>("DishSource");
+            TagsGrid = this.FindControl<UniformGrid>("TagsGrid");
         }
+
+        public UniformGrid TagsGrid { get; set; }
 
         protected override void InitializeAdditionalGuiData()
         {
             SelectedSource.Items = Service.Sources;
             if (Service.Sources.Any())
                 SelectedSource.SelectedIndex = 0;
+
+            foreach (var tag in Service.Tags)
+            {
+                TagsGrid.Children.Add(new CheckBox
+                {
+                    Content = tag.Name
+                });
+            }
         }
 
         protected override void SetupAdditionalEvents()

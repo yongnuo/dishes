@@ -11,5 +11,15 @@ namespace Dishes
             source.Name = reader.GetString(1);
             return source;
         }
+
+        public static Tag MapToTag(this SqliteDataReader reader)
+        {
+            var tag = new Tag();
+            tag.Id = reader.GetInt32(0);
+            tag.Name = reader.GetString(1);
+            return tag;
+        }
     }
+
+
 }

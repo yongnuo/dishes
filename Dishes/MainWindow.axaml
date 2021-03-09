@@ -8,11 +8,14 @@
         Title="Dishes"
         Padding="6">
   <TabControl>
+    <TabItem Header="Dishes">
+      <dishes:DishesUserControl Name="DishesUserControl" />
+    </TabItem>
     <TabItem Header="Sources">
       <dishes:SourcesUserControl Name="SourcesUserControl" />
     </TabItem>
-    <TabItem Header="Dishes">
-      <dishes:DishesUserControl Name="DishesUserControl" />
+    <TabItem Header="Tags">
+      <dishes:TagsUserControl Name="TagsUserControl" />
     </TabItem>
   </TabControl>
 </Window>

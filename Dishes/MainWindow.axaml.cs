@@ -11,6 +11,7 @@ namespace Dishes
 
         private SourcesUserControl SourcesUserControl { get; set; }
         private DishesUserControl DishesUserControl { get; set; }
+        private TagsUserControl TagsUserControl { get; set; }
 
         public MainWindow()
         {
@@ -23,8 +24,10 @@ namespace Dishes
 #endif
             DishesUserControl = (DishesUserControl)this.FindControl<UserControl>("DishesUserControl");
             SourcesUserControl = (SourcesUserControl)this.FindControl<UserControl>("SourcesUserControl");
+            TagsUserControl = (TagsUserControl)this.FindControl<UserControl>("TagsUserControl");
             DishesUserControl.Initialize(_service);
             SourcesUserControl.Initialize(_service);
+            TagsUserControl.Initialize(_service);
         }
 
         private void InitializeComponent()
