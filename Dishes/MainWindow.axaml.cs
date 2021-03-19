@@ -1,6 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Dishes.Services;
+using Dishes.UserControls;
 
 namespace Dishes
 {
@@ -9,9 +11,9 @@ namespace Dishes
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly Service _service;
 
-        private SourcesUserControl SourcesUserControl { get; set; }
-        private DishesUserControl DishesUserControl { get; set; }
-        private TagsUserControl TagsUserControl { get; set; }
+        private SourcesUserControl SourcesUserControl { get; }
+        private DishesUserControl DishesUserControl { get; }
+        private TagsUserControl TagsUserControl { get; }
 
         public MainWindow()
         {
@@ -28,6 +30,9 @@ namespace Dishes
             DishesUserControl.Initialize(_service);
             SourcesUserControl.Initialize(_service);
             TagsUserControl.Initialize(_service);
+
+            SourcesUserControl.SourcesUpdated += DishesUserControl.ReloadSources;
+            TagsUserControl.TagsUpdated += DishesUserControl.ReloadTags;
         }
 
         private void InitializeComponent()

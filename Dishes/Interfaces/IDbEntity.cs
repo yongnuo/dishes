@@ -1,4 +1,4 @@
-namespace Dishes
+namespace Dishes.Interfaces
 {
     public interface IDbEntity
     {

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Dishes.Models;
+using Dishes.Repositories;
 
-namespace Dishes
+namespace Dishes.Services
 {
     public class Service
     {
@@ -16,7 +18,9 @@ namespace Dishes
 
         public Service()
         {
-            var connectionString = @"Data Source=C:\Users\zacha\Desktop\New folder\dishes.db";
+            var connectionString = $"Data Source={AppSettingsService.Instance.ConnectionString}";
+            var dbMigrationService = new DbMigrationService(connectionString);
+            dbMigrationService.VerifySchema();
             _dishRepository = new DishRepository(connectionString);
             Dishes = new List<Dish>();
             _sourceRepository = new SourceRepository(connectionString);
@@ -30,12 +34,17 @@ namespace Dishes
             Dishes = _dishRepository.LoadDishes();
             Sources = _sourceRepository.LoadSources();
             Tags = _tagRepository.LoadTags();
+            var dishTags = _dishRepository.LoadDishTags();
             SortDishes();
             SortSources();
             SortTags();
             foreach (var dish in Dishes)
             {
                 dish.Source = Sources.First(s => s.Id == dish.SourceId);
+                dish.Tags = dishTags
+                    .Where(dt => dt.DishId == dish.Id)
+                    .Select(dt => Tags.First(t => t.Id == dt.TagId))
+                    .ToList();
             }
         }
 

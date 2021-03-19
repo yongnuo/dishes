@@ -1,4 +1,7 @@
-namespace Dishes
+using System.Collections.Generic;
+using Dishes.Interfaces;
+
+namespace Dishes.Models
 {
     public class Dish : IDbEntity
     {
@@ -8,6 +11,7 @@ namespace Dishes
         public int SourceId { get; set; }
         public string Path { get; set; }
         public Source Source { get; set; }
+        public List<Tag> Tags { get; set; }
 
         public Dish()
         {

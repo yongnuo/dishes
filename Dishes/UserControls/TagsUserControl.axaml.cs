@@ -1,13 +1,16 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Dishes.Models;
 
-namespace Dishes
+namespace Dishes.UserControls
 {
     public class TagsUserControl : ListsUserControl<Tag>
     {
         public TextBox TagName { get; set; }
+        public event Action TagsUpdated = delegate { };
 
         protected override void SetupAdditionalGuiControls()
         {
@@ -40,6 +43,7 @@ namespace Dishes
             var source = new Tag();
             source.Name = TagName.Text;
             Service.AddTag(source);
+            TagsUpdated();
             return source;
         }
 
@@ -48,6 +52,7 @@ namespace Dishes
             var source = Service.Tags.First(s => s.Id == GetEntityId());
             source.Name = TagName.Text;
             Service.UpdateTag(source);
+            TagsUpdated();
             return source;
         }
 
@@ -69,6 +74,7 @@ namespace Dishes
         protected override void DeleteEntity()
         {
             Service.DeleteTag(GetEntityId());
+            TagsUpdated();
         }
     }
 }

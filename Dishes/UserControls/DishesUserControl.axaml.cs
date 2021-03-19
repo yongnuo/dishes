@@ -3,8 +3,9 @@ using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
+using Dishes.Models;
 
-namespace Dishes
+namespace Dishes.UserControls
 {
     public class DishesUserControl : ListsUserControl<Dish>
     {
@@ -26,17 +27,38 @@ namespace Dishes
 
         protected override void InitializeAdditionalGuiData()
         {
-            SelectedSource.Items = Service.Sources;
+            ReloadSources();
             if (Service.Sources.Any())
                 SelectedSource.SelectedIndex = 0;
 
+            ReloadTags();
+        }
+
+        public void ReloadSources()
+        {
+            var selectedSource = SelectedSource.SelectedItem;
+            SelectedSource.Items = Service.Sources;
+            SelectedSource.SelectedItem = null;
+            SelectedSource.SelectedItem = selectedSource;
+        }
+
+        public void ReloadTags()
+        {
+            var controls = new Controls();
             foreach (var tag in Service.Tags)
             {
-                TagsGrid.Children.Add(new CheckBox
+                var isChecked = TagsGrid.Children.FirstOrDefault(c => ((CheckBox) c).Tag == tag) is CheckBox existing 
+                                && existing.IsChecked.HasValue 
+                                && existing.IsChecked.Value;
+                controls.Add(new CheckBox
                 {
-                    Content = tag.Name
+                    Content = tag.Name,
+                    Tag = tag,
+                    IsChecked = isChecked
                 });
             }
+            TagsGrid.Children.Clear();
+            TagsGrid.Children.AddRange(controls);
         }
 
         protected override void SetupAdditionalEvents()
@@ -62,10 +84,23 @@ namespace Dishes
                 Name = DishName.Text,
                 Path = DishPath.Text,
                 Comment = DishComment.Text,
-                Source = selectedSource
+                Source = selectedSource,
+                Tags = GetDishTagsFromGui()
             };
             Service.AddDish(dish);
             return dish;
+        }
+
+        private List<Tag> GetDishTagsFromGui()
+        {
+            return TagsGrid.Children
+                .Where(c =>
+                {
+                    var cbIsChecked = ((CheckBox) c).IsChecked;
+                    return cbIsChecked.HasValue && cbIsChecked.Value;
+                })
+                .Select(c => (Tag)((CheckBox)c).Tag)
+                .ToList();
         }
 
         protected override Dish UpdateEntity()
@@ -76,6 +111,7 @@ namespace Dishes
             dish.Path = DishPath.Text;
             dish.Comment = DishComment.Text;
             dish.Source = selectedSource;
+            dish.Tags = GetDishTagsFromGui();
             Service.UpdateDish(dish);
             return dish;
         }
@@ -91,6 +127,11 @@ namespace Dishes
             DishPath.Text = dish.Path;
             DishComment.Text = dish.Comment;
             SelectedSource.SelectedItem = dish.Source;
+            foreach (var tagsGridChild in TagsGrid.Children)
+            {
+                var cb = (CheckBox) tagsGridChild;
+                cb.IsChecked = dish.Tags.Any(t => t == (Tag) cb.Tag);
+            }
         }
 
         protected override void ClearAdditionalInputFields()
@@ -98,6 +139,10 @@ namespace Dishes
             DishName.Text = string.Empty;
             DishPath.Text = string.Empty;
             DishComment.Text = string.Empty;
+            foreach (var cb in TagsGrid.Children)
+            {
+                ((CheckBox) cb).IsChecked = false;
+            }
         }
 
         protected override List<Dish> GetData()

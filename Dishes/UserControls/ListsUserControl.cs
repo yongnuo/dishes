@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Dishes.Interfaces;
+using Dishes.Services;
+using Dishes.Tools;
 
-namespace Dishes
+namespace Dishes.UserControls
 {
     public abstract class ListsUserControl<T> : UserControl where T : IDbEntity
     {
@@ -45,7 +48,7 @@ namespace Dishes
             SetupGuiControls();
 
             _searchText = string.Empty;
-            SearchBox.AttachedToVisualTree += (_, _) => SearchBox.Focus(); // Verkar ta tid
+            SearchBox.AttachedToVisualTree += (s, e) => SearchBox.Focus(); // Verkar ta tid
         }
 
         private void SetupGuiControls()
@@ -84,8 +87,8 @@ namespace Dishes
             SearchBox.KeyDown += HandleSearchKeyDown;
 
             SearchBox.GotFocus += SelectTextOnFocus;
-            Entities.DoubleTapped += (_, _) => LoadSelectedEntity();
-            SearchBox.PropertyChanged += (_, _) =>
+            Entities.DoubleTapped += (s, e) => LoadSelectedEntity();
+            SearchBox.PropertyChanged += (s, e) =>
             {
                 if (SearchBox.Text == null)
                     return;
@@ -95,9 +98,9 @@ namespace Dishes
                     _queueHandler.Trigger(_searchText);
                 }
             };
-            SaveButton.Click += (_, _) => SaveOrUpdate();
-            CancelButton.Click += (_, _) => ClearInputFields();
-            DeleteButton.Click += (_, _) => Delete();
+            SaveButton.Click += (s, e) => SaveOrUpdate();
+            CancelButton.Click += (s, e) => ClearInputFields();
+            DeleteButton.Click += (s, e) => Delete();
 
             SetupAdditionalEvents();
         }
@@ -199,6 +202,7 @@ namespace Dishes
             DeleteButton.IsEnabled = false;
             SaveButton.Content = Properties.Resources.Save;
             ClearAdditionalInputFields();
+            SearchBox.Focus();
         }
 
         private void UpdateEntityList()

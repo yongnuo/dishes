@@ -1,11 +1,13 @@
 using System.Collections.Generic;
+using Dishes.Extensions;
+using Dishes.Models;
 using Microsoft.Data.Sqlite;
 
-namespace Dishes
+namespace Dishes.Repositories
 {
     public class SourceRepository
     {
-        private static string _connectionString = "Data Source=dishes.db";
+        private readonly string _connectionString;
 
         public SourceRepository(string connectionString)
         {
@@ -30,6 +32,19 @@ namespace Dishes
             return sources;
         }
 
+        public void AddSource(Source source)
+        {
+            using var connection = new SqliteConnection(_connectionString);
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText =
+                @"insert into sources (Name) values ($name);";
+            command.AddAllPropertiesAsParameters(source);
+            command.ExecuteNonQuery();
+            source.Id = connection.GetLastRowId();
+        }
+
         public void UpdateSource(Source source)
         {
             using var connection = new SqliteConnection(_connectionString);
@@ -42,28 +57,6 @@ Name=$name
 where SourceId=$id;";
             command.AddAllPropertiesAsParameters(source);
             command.ExecuteNonQuery();
-        }
-
-        public void AddSource(Source source)
-        {
-            using var connection = new SqliteConnection(_connectionString);
-            connection.Open();
-
-            var command = connection.CreateCommand();
-            command.CommandText =
-                @"insert into sources (Name) values ($name);";
-            command.AddAllPropertiesAsParameters(source);
-            command.ExecuteNonQuery();
-            command.CommandText = "select last_insert_rowid()";
-
-            // The row ID is a 64-bit value - cast the Command result to an Int64.
-            //
-            var lastRowId64 = (long)command.ExecuteScalar();
-
-            // Then grab the bottom 32-bits as the unique ID of the row.
-            //
-            var lastRowId = (int)lastRowId64;
-            source.Id = lastRowId;
         }
 
         public void DeleteSource(int sourceId)

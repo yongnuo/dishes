@@ -6,15 +6,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 
-namespace Dishes
+namespace Dishes.Tools
 {
     public class QueueHandler
     {
         private const string LogfileTxt = @"C:\Code\Dishes\Dishes\bin\Debug\net5.0\logfile.txt";
         private readonly Action _filterGui;
         private readonly ConcurrentQueue<string> _queue;
+        // ReSharper disable once CollectionNeverQueried.Global
         public List<Task> Tasks { get; }
-        private static readonly SemaphoreLocker Locker = new();
+        private static readonly SemaphoreLocker Locker = new SemaphoreLocker();
 
         public QueueHandler(Action filterGui)
         {

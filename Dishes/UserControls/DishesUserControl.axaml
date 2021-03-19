@@ -2,11 +2,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:dishes="clr-namespace:Dishes"
              xmlns:properties="clr-namespace:Dishes.Properties"
+             xmlns:models="clr-namespace:Dishes.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Dishes.DishesUserControl">
-<Grid RowDefinitions="Auto,12,Auto,Auto,Auto,Auto,Auto,Auto,*,Auto,Auto" ColumnDefinitions="*,*">
+             x:Class="Dishes.UserControls.DishesUserControl">
+<Grid RowDefinitions="Auto,12,Auto,Auto,Auto,Auto,Auto,Auto,Auto,*,Auto" ColumnDefinitions="*,*">
         <TextBlock Grid.Row="0" Grid.Column="0" Classes="Label" Text="Find"/>
         <TextBox Grid.Row="0" Grid.Column="1" Classes="Property" Name="SearchBox"/>
         <TextBlock Grid.Row="2" Grid.Column="0" Classes="Label" Text="Id"/>
@@ -18,7 +18,7 @@
         <TextBlock Grid.Row="5" Grid.Column="0" Classes="Label" Text="Source"/>
         <ComboBox Grid.Row="5" Grid.Column="1" Classes="Property" Name="DishSource">
           <ComboBox.ItemTemplate>
-            <DataTemplate DataType="dishes:Source">
+            <DataTemplate DataType="models:Source">
               <TextBlock Text="{Binding Name}" FontFamily="{Binding}" />
             </DataTemplate>
           </ComboBox.ItemTemplate>
