@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls;
@@ -13,6 +14,8 @@ namespace Dishes.UserControls
         private TextBox DishComment { get; set; }
         private TextBox DishPath { get; set; }
         private ComboBox SelectedSource { get; set; }
+
+        public event Action DishesUpdated = delegate { };
 
         protected override void SetupAdditionalGuiControls()
         {
@@ -88,6 +91,7 @@ namespace Dishes.UserControls
                 Tags = GetDishTagsFromGui()
             };
             Service.AddDish(dish);
+            DishesUpdated();
             return dish;
         }
 
@@ -113,12 +117,14 @@ namespace Dishes.UserControls
             dish.Source = selectedSource;
             dish.Tags = GetDishTagsFromGui();
             Service.UpdateDish(dish);
+            DishesUpdated();
             return dish;
         }
 
         protected override void DeleteEntity()
         {
             Service.DeleteDish(GetEntityId());
+            DishesUpdated();
         }
 
         protected override void SetInputFields(Dish dish)

@@ -24,7 +24,7 @@ namespace Dishes.UserControls
 
         private Button SaveButton { get; set; }
         private Button CancelButton { get; set; }
-        private Button DeleteButton { get; set; }
+        protected Button DeleteButton { get; set; }
 
         protected abstract void SetupAdditionalGuiControls();
         protected abstract void InitializeAdditionalGuiData();
@@ -205,7 +205,7 @@ namespace Dishes.UserControls
             SearchBox.Focus();
         }
 
-        private void UpdateEntityList()
+        public void UpdateEntityList()
         {
             var selectedEntity = (T)Entities.SelectedItem;
             var items = GetData();

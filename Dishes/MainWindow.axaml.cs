@@ -32,6 +32,7 @@ namespace Dishes
             TagsUserControl.Initialize(_service);
 
             SourcesUserControl.SourcesUpdated += DishesUserControl.ReloadSources;
+            DishesUserControl.DishesUpdated += SourcesUserControl.UpdateEntityList;
             TagsUserControl.TagsUpdated += DishesUserControl.ReloadTags;
         }
 

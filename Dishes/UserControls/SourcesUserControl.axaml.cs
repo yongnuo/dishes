@@ -31,6 +31,7 @@ namespace Dishes.UserControls
         protected override void SetInputFields(Source selectedEntity)
         {
             SourceName.Text = selectedEntity.Name;
+            DeleteButton.IsEnabled = selectedEntity.NoOfUsages == 0;
         }
 
         protected override void FocusPrimaryEditField()
@@ -63,6 +64,10 @@ namespace Dishes.UserControls
 
         protected override List<Source> GetData()
         {
+            foreach (var source in Service.Sources)
+            {
+                source.NoOfUsages = Service.Dishes.Count(d => d.Source == source);
+            }
             return Service.Sources;
         }
 

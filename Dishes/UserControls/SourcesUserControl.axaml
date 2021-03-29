@@ -25,6 +25,9 @@
         <DataGridTextColumn Header="Name"
                             MinWidth="270"
                             Binding="{Binding Name}" />
+        <DataGridTextColumn Header="No of usages"
+                            MinWidth="30"
+                            Binding="{Binding NoOfUsages}" />
       </DataGrid.Columns>
     </DataGrid>
     <Button Grid.Row="9" Grid.Column="1" Name="Delete" Content="Delete" HorizontalAlignment="Right" Margin="0 6 0 0" />
