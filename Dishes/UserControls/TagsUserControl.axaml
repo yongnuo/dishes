@@ -27,7 +27,8 @@
                             Binding="{Binding Name}" />
       </DataGrid.Columns>
     </DataGrid>
-    <Button Grid.Row="9" Grid.Column="1" Name="Delete" Content="Delete" HorizontalAlignment="Right" Margin="0 6 0 0" />
+    <TextBlock Grid.Row="9" Grid.Column="0" Name="NoOfEntities" HorizontalAlignment="Left" Margin="12 6 0 0" />
+    <Button Grid.Row="9" Grid.Column="1" Name="Delete" Content="Delete" HorizontalAlignment="Right" Margin="6 6 0 0" />
 
   </Grid>
 

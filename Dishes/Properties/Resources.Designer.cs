@@ -61,6 +61,60 @@ namespace Dishes.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Really remove dish &quot;{0}&quot;?.
+        /// </summary>
+        public static string ConfirmRemoveDish {
+            get {
+                return ResourceManager.GetString("ConfirmRemoveDish", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Really remove source &quot;{0}&quot;?.
+        /// </summary>
+        public static string ConfirmRemoveSource {
+            get {
+                return ResourceManager.GetString("ConfirmRemoveSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Really remove tag &quot;{0}&quot;?.
+        /// </summary>
+        public static string ConfirmRemoveTag {
+            get {
+                return ResourceManager.GetString("ConfirmRemoveTag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove dish.
+        /// </summary>
+        public static string RemoveDish {
+            get {
+                return ResourceManager.GetString("RemoveDish", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove source.
+        /// </summary>
+        public static string RemoveSource {
+            get {
+                return ResourceManager.GetString("RemoveSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove tag.
+        /// </summary>
+        public static string RemoveTag {
+            get {
+                return ResourceManager.GetString("RemoveTag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string Save {

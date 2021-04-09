@@ -1,9 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
+using AvaloniaTools.Enums;
+using AvaloniaTools.Windows;
 using Dishes.Models;
 
 namespace Dishes.UserControls
@@ -14,8 +18,16 @@ namespace Dishes.UserControls
         private TextBox DishComment { get; set; }
         private TextBox DishPath { get; set; }
         private ComboBox SelectedSource { get; set; }
+        private UniformGrid TagsGrid { get; set; }
+        private UniformGrid FindTagsGrid { get; set; }
 
+        private readonly Dictionary<Tag, bool?> _findTagsGridValues;
         public event Action DishesUpdated = delegate { };
+
+        public DishesUserControl()
+        {
+            _findTagsGridValues = new Dictionary<Tag, bool?>();
+        }
 
         protected override void SetupAdditionalGuiControls()
         {
@@ -24,9 +36,9 @@ namespace Dishes.UserControls
             DishComment = this.FindControl<TextBox>("DishComment");
             SelectedSource = this.FindControl<ComboBox>("DishSource");
             TagsGrid = this.FindControl<UniformGrid>("TagsGrid");
+            FindTagsGrid = this.FindControl<UniformGrid>("FindTagsGrid");
         }
 
-        public UniformGrid TagsGrid { get; set; }
 
         protected override void InitializeAdditionalGuiData()
         {
@@ -39,29 +51,59 @@ namespace Dishes.UserControls
 
         public void ReloadSources()
         {
-            var selectedSource = SelectedSource.SelectedItem;
+            var selectedSource = (Source)SelectedSource.SelectedItem;
+            SelectedSource.Items = null; // Needed for a working reload of Items
             SelectedSource.Items = Service.Sources;
-            SelectedSource.SelectedItem = null;
             SelectedSource.SelectedItem = selectedSource;
         }
 
         public void ReloadTags()
         {
-            var controls = new Controls();
+            var tagsGridChildren = new Controls();
+            var findTagsGridChildren = new Controls();
             foreach (var tag in Service.Tags)
             {
-                var isChecked = TagsGrid.Children.FirstOrDefault(c => ((CheckBox) c).Tag == tag) is CheckBox existing 
-                                && existing.IsChecked.HasValue 
+                var isChecked = TagsGrid.Children.FirstOrDefault(c => ((CheckBox)c).Tag == tag) is CheckBox existing
+                                && existing.IsChecked.HasValue
                                 && existing.IsChecked.Value;
-                controls.Add(new CheckBox
+                tagsGridChildren.Add(new CheckBox
                 {
                     Content = tag.Name,
                     Tag = tag,
                     IsChecked = isChecked
                 });
+
+                var findIsChecked = _findTagsGridValues.ContainsKey(tag)
+                    ? _findTagsGridValues[tag]
+                    : null;
+                var findCheckBox = new CheckBox
+                {
+                    Content = tag.Name,
+                    Tag = tag,
+                    IsChecked = findIsChecked,
+                    IsThreeState = true
+                };
+                findCheckBox.PropertyChanged += FindTagsGridChanged;
+                findTagsGridChildren.Add(findCheckBox);
             }
             TagsGrid.Children.Clear();
-            TagsGrid.Children.AddRange(controls);
+            TagsGrid.Children.AddRange(tagsGridChildren);
+            FindTagsGrid.Children.Clear();
+            FindTagsGrid.Children.AddRange(findTagsGridChildren);
+        }
+
+
+        private void FindTagsGridChanged(object sender, AvaloniaPropertyChangedEventArgs e)
+        {
+            if (e.Property != ToggleButton.IsCheckedProperty)
+                return;
+            if (!(sender is CheckBox cb)) return;
+            var tag = (Tag) cb.Tag;
+            if (_findTagsGridValues.ContainsKey(tag))
+                _findTagsGridValues[tag] = cb.IsChecked;
+            else
+                _findTagsGridValues.Add(tag, cb.IsChecked);
+            QueueHandler.Trigger(string.Empty);
         }
 
         protected override void SetupAdditionalEvents()
@@ -121,10 +163,29 @@ namespace Dishes.UserControls
             return dish;
         }
 
-        protected override void DeleteEntity()
+        protected override async Task DeleteEntity()
         {
-            Service.DeleteDish(GetEntityId());
-            DishesUpdated();
+            var entityId = GetEntityId();
+            var dishToDelete = Service.Dishes.First(d => d.Id == entityId);
+            var dialog = new ButtonDialog(ButtonEnum.OkCancel, Properties.Resources.RemoveDish, string.Format(Properties.Resources.ConfirmRemoveDish, dishToDelete.Name));
+            if (await dialog.Open() == ButtonResult.Ok)
+            {
+                Service.DeleteDish(entityId);
+                DishesUpdated();
+            }
+        }
+
+        protected override List<Dish> PerformAdditionalFiltering(List<Dish> filteredEntities)
+        {
+            var trueTags = _findTagsGridValues.Where(tt => tt.Value == true).Select(tt => tt.Key);
+            var falseTags = _findTagsGridValues.Where(ft => ft.Value == false).Select(ft => ft.Key);
+
+            return filteredEntities.Where(fe =>
+                                    trueTags.All(tt => fe.Tags.Contains(tt)) 
+                                   && 
+                                   falseTags.All(ft => !fe.Tags.Contains(ft))
+                )
+                .ToList();
         }
 
         protected override void SetInputFields(Dish dish)

@@ -117,6 +117,24 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ConfirmRemoveDish" xml:space="preserve">
+    <value>Really remove dish "{0}"?</value>
+  </data>
+  <data name="ConfirmRemoveSource" xml:space="preserve">
+    <value>Really remove source "{0}"?</value>
+  </data>
+  <data name="ConfirmRemoveTag" xml:space="preserve">
+    <value>Really remove tag "{0}"?</value>
+  </data>
+  <data name="RemoveDish" xml:space="preserve">
+    <value>Remove dish</value>
+  </data>
+  <data name="RemoveSource" xml:space="preserve">
+    <value>Remove source</value>
+  </data>
+  <data name="RemoveTag" xml:space="preserve">
+    <value>Remove tag</value>
+  </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>
   </data>

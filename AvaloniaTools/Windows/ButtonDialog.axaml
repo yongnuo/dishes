@@ -1,0 +1,15 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="AvaloniaTools.Windows.ButtonDialog"
+        Width="380" Height="150" SizeToContent="Manual">
+    <Window.Styles>
+        <StyleInclude Source="/Styles/CustomStyles.xaml" />
+    </Window.Styles>
+    <Grid ColumnDefinitions="*" RowDefinitions="*,6,Auto">
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="8" Name="Text" Text="Really remove this?" />
+        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right">
+            <Button Name="Ok" Content="Ok" Margin="0 0 6 0" HorizontalAlignment="Right" IsDefault="True" />
+            <Button Name="Cancel" Content="Cancel" HorizontalAlignment="Right" IsCancel="True" />
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using AvaloniaTools.Enums;
+using AvaloniaTools.Windows;
 using Dishes.Models;
 
 namespace Dishes.UserControls
@@ -76,10 +79,21 @@ namespace Dishes.UserControls
             AvaloniaXamlLoader.Load(this);
         }
 
-        protected override void DeleteEntity()
+        protected override async Task DeleteEntity()
         {
-            Service.DeleteSource(GetEntityId());
-            SourcesUpdated();
+            var entityId = GetEntityId();
+            var sourceToDelete = Service.Sources.First(d => d.Id == entityId);
+            var dialog = new ButtonDialog(ButtonEnum.OkCancel, Properties.Resources.RemoveSource, string.Format(Properties.Resources.ConfirmRemoveSource, sourceToDelete.Name));
+            if (await dialog.Open() == ButtonResult.Ok)
+            {
+                Service.DeleteSource(entityId);
+                SourcesUpdated();
+            }
+        }
+
+        protected override List<Source> PerformAdditionalFiltering(List<Source> filteredEntities)
+        {
+            return filteredEntities;
         }
     }
 }

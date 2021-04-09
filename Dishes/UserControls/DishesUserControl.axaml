@@ -6,9 +6,11 @@
              xmlns:models="clr-namespace:Dishes.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Dishes.UserControls.DishesUserControl">
-<Grid RowDefinitions="Auto,12,Auto,Auto,Auto,Auto,Auto,Auto,Auto,*,Auto" ColumnDefinitions="*,*">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,*,Auto" ColumnDefinitions="*,*">
         <TextBlock Grid.Row="0" Grid.Column="0" Classes="Label" Text="Find"/>
         <TextBox Grid.Row="0" Grid.Column="1" Classes="Property" Name="SearchBox"/>
+        <UniformGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  Name="FindTagsGrid" Columns="5" />
         <TextBlock Grid.Row="2" Grid.Column="0" Classes="Label" Text="Id"/>
         <TextBlock Grid.Row="2" Grid.Column="1" Classes="Property" Name="EntityId"/>
         <TextBlock Grid.Row="3" Grid.Column="0" Classes="Label" Text="Name"/>
@@ -44,6 +46,7 @@
                                 Binding="{Binding Source.Name}" />
           </DataGrid.Columns>
         </DataGrid>
+        <TextBlock Text="Hej" Grid.Row="10" Grid.Column="0" Name="NoOfEntities" HorizontalAlignment="Left" Margin="12 6 0 0" />
         <Button Grid.Row="10" Grid.Column="1" Name="Delete" Content="Delete" HorizontalAlignment="Right" Margin="0 6 0 0" />
 
       </Grid>

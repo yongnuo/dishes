@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Dishes.Interfaces;
@@ -13,7 +14,7 @@ namespace Dishes.UserControls
     {
         protected Service Service;
 
-        private readonly QueueHandler _queueHandler;
+        protected readonly QueueHandler QueueHandler;
         private List<T> _filteredEntities;
         private string _searchText;
 
@@ -21,6 +22,7 @@ namespace Dishes.UserControls
         private TextBox SearchBox { get; set; }
         private TextBlock EntityId { get; set; }
         private DataGrid Entities { get; set; }
+        private TextBlock NoOfEntities { get; set; }
 
         private Button SaveButton { get; set; }
         private Button CancelButton { get; set; }
@@ -36,11 +38,12 @@ namespace Dishes.UserControls
         protected abstract void ClearAdditionalInputFields();
         protected abstract List<T> GetData();
         protected abstract void InitializeComponent();
+        protected abstract Task DeleteEntity();
 
 
         protected ListsUserControl()
         {
-            _queueHandler = new QueueHandler(UpdateEntityList);
+            QueueHandler = new QueueHandler(UpdateEntityList);
 
             // ReSharper disable once VirtualMemberCallInConstructor
             InitializeComponent();
@@ -55,6 +58,7 @@ namespace Dishes.UserControls
         {
             Entities = this.FindControl<DataGrid>("Entities");
             EntityId = this.FindControl<TextBlock>("EntityId");
+            NoOfEntities = this.FindControl<TextBlock>("NoOfEntities");
             SearchBox = this.FindControl<TextBox>("SearchBox");
             SaveButton = this.FindControl<Button>("Save");
             CancelButton = this.FindControl<Button>("Cancel");
@@ -95,12 +99,12 @@ namespace Dishes.UserControls
                 if (SearchBox.Text != _searchText)
                 {
                     _searchText = SearchBox.Text;
-                    _queueHandler.Trigger(_searchText);
+                    QueueHandler.Trigger(_searchText);
                 }
             };
             SaveButton.Click += (s, e) => SaveOrUpdate();
             CancelButton.Click += (s, e) => ClearInputFields();
-            DeleteButton.Click += (s, e) => Delete();
+            DeleteButton.Click += async (s, e) => await Delete();
 
             SetupAdditionalEvents();
         }
@@ -173,10 +177,10 @@ namespace Dishes.UserControls
             SearchBox.Focus();
         }
 
-        private void Delete()
+        private async Task Delete()
         {
             var selectedIndex = Entities.SelectedIndex;
-            DeleteEntity();
+            await DeleteEntity();
             UpdateEntityList();
             ClearInputFields();
             if (selectedIndex >= GetData().Count)
@@ -186,8 +190,6 @@ namespace Dishes.UserControls
             Entities.SelectedIndex = selectedIndex;
             SearchBox.Focus();
         }
-
-        protected abstract void DeleteEntity();
 
         protected int GetEntityId()
         {
@@ -211,11 +213,15 @@ namespace Dishes.UserControls
             var items = GetData();
             _filteredEntities = items.Where(d =>
                 d.Name.Contains(_searchText, StringComparison.CurrentCultureIgnoreCase)).ToList();
+            _filteredEntities = PerformAdditionalFiltering(_filteredEntities);
             Entities.Items = _filteredEntities;
             if (_filteredEntities.Contains(selectedEntity))
                 Entities.SelectedItem = selectedEntity;
             else
                 Entities.SelectedIndex = 0;
+            NoOfEntities.Text = $"{_filteredEntities.Count} / {items.Count}";
         }
+
+        protected abstract List<T> PerformAdditionalFiltering(List<T> filteredEntities);
     }
 }
