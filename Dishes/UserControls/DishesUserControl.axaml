@@ -8,16 +8,16 @@
              x:Class="Dishes.UserControls.DishesUserControl">
 
     <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,*,Auto" ColumnDefinitions="*,*">
-        <TextBlock Grid.Row="0" Grid.Column="0" Classes="Label" Text="Find"/>
+        <TextBlock Grid.Row="0" Grid.Column="0" Classes="Label" Text="{x:Static properties:Resources.FindLabel}"/>
         <TextBox Grid.Row="0" Grid.Column="1" Classes="Property" Name="SearchBox"/>
         <UniformGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  Name="FindTagsGrid" Columns="5" />
-        <TextBlock Grid.Row="2" Grid.Column="0" Classes="Label" Text="Id"/>
+        <TextBlock Grid.Row="2" Grid.Column="0" Classes="Label" Text="{x:Static properties:Resources.IdLabel}"/>
         <TextBlock Grid.Row="2" Grid.Column="1" Classes="Property" Name="EntityId"/>
-        <TextBlock Grid.Row="3" Grid.Column="0" Classes="Label" Text="Name"/>
+        <TextBlock Grid.Row="3" Grid.Column="0" Classes="Label" Text="{x:Static properties:Resources.NameLabel}"/>
         <TextBox Grid.Row="3" Grid.Column="1" Classes="Property" Name="DishName" />
-        <TextBlock Grid.Row="4" Grid.Column="0" Classes="Label" Text="Path"/>
+        <TextBlock Grid.Row="4" Grid.Column="0" Classes="Label" Text="{x:Static properties:Resources.DishPathLabel}"/>
         <TextBox Grid.Row="4" Grid.Column="1" Classes="Property" Name="DishPath" />
-        <TextBlock Grid.Row="5" Grid.Column="0" Classes="Label" Text="Source"/>
+        <TextBlock Grid.Row="5" Grid.Column="0" Classes="Label" Text="{x:Static properties:Resources.DishSourceLabel}"/>
         <ComboBox Grid.Row="5" Grid.Column="1" Classes="Property" Name="DishSource">
           <ComboBox.ItemTemplate>
             <DataTemplate DataType="models:Source">
@@ -25,30 +25,28 @@
             </DataTemplate>
           </ComboBox.ItemTemplate>
         </ComboBox>
-        <TextBlock Grid.Row="6" Grid.Column="0" Classes="Label" VerticalAlignment="Top" Text="Comment"/>
+        <TextBlock Grid.Row="6" Grid.Column="0" Classes="Label" VerticalAlignment="Top" Text="{x:Static properties:Resources.DishCommentLabel}"/>
         <TextBox Grid.Row="6" Grid.Column="1" Classes="Property"
                  AcceptsReturn="True" Height="100" Name="DishComment" />
         <UniformGrid Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"  Name="TagsGrid" Columns="5" />
         <Button Grid.Row="8" Grid.Column="0" Name="Save" Content="{x:Static properties:Resources.Save}" HorizontalAlignment="Right" Margin="0 0 6 6" />
-        <Button Grid.Row="8" Grid.Column="1" Name="Cancel" Content="Cancel" Margin="0 0 0 6" />
+        <Button Grid.Row="8" Grid.Column="1" Name="Cancel" Content="{x:Static properties:Resources.Cancel}" Margin="0 0 0 6" />
         <DataGrid Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2"
                   Name="Entities" MinHeight="100" MinWidth="800"
                   VerticalScrollBarVisibility="Visible" IsReadOnly="True">
           <DataGrid.Columns>
-            <DataGridTextColumn Header="Id"
+            <DataGridTextColumn Header="{x:Static properties:Resources.IdLabel}"
                                 MinWidth="30"
                                 Binding="{Binding Id}" />
-            <DataGridTextColumn Header="Name"
+            <DataGridTextColumn Header="{x:Static properties:Resources.NameLabel}"
                                 MinWidth="270"
                                 Binding="{Binding Name}" />
-            <DataGridTextColumn Header="Source"
+            <DataGridTextColumn Header="{x:Static properties:Resources.DishSourceLabel}"
                                 MinWidth="270"
                                 Binding="{Binding Source.Name}" />
           </DataGrid.Columns>
         </DataGrid>
         <TextBlock Text="Hej" Grid.Row="10" Grid.Column="0" Name="NoOfEntities" HorizontalAlignment="Left" Margin="12 6 0 0" />
-        <Button Grid.Row="10" Grid.Column="1" Name="Delete" Content="Delete" HorizontalAlignment="Right" Margin="0 6 0 0" />
-
-      </Grid>
-
+        <Button Grid.Row="10" Grid.Column="1" Name="Delete" Content="{x:Static properties:Resources.Delete}" HorizontalAlignment="Right" Margin="0 6 0 0" />
+    </Grid>
 </UserControl>

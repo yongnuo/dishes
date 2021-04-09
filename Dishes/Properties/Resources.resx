@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ApplicationTitle" xml:space="preserve">
+    <value>Dishes</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="ConfirmRemoveDish" xml:space="preserve">
     <value>Really remove dish "{0}"?</value>
   </data>
@@ -125,6 +131,33 @@
   </data>
   <data name="ConfirmRemoveTag" xml:space="preserve">
     <value>Really remove tag "{0}"?</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DishCommentLabel" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="DishesTabTitle" xml:space="preserve">
+    <value>Dishes</value>
+  </data>
+  <data name="DishPathLabel" xml:space="preserve">
+    <value>Path</value>
+  </data>
+  <data name="DishSourceLabel" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="FindLabel" xml:space="preserve">
+    <value>Find</value>
+  </data>
+  <data name="IdLabel" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="NameLabel" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="NoOfUsages" xml:space="preserve">
+    <value>NoOfUsages</value>
   </data>
   <data name="RemoveDish" xml:space="preserve">
     <value>Remove dish</value>
@@ -137,6 +170,12 @@
   </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>
+  </data>
+  <data name="SourcesTabTitle" xml:space="preserve">
+    <value>Sources</value>
+  </data>
+  <data name="TagsTabTitle" xml:space="preserve">
+    <value>Tags</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Update</value>

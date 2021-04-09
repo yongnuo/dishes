@@ -3,19 +3,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:userControls="clr-namespace:Dishes.UserControls"
+        xmlns:properties="clr-namespace:Dishes.Properties"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Dishes.MainWindow"
-        Title="Dishes"
+        Title="{x:Static properties:Resources.ApplicationTitle}"
         Icon="/Assets/dishes.ico"
         Padding="6">
   <TabControl>
-    <TabItem Header="Dishes">
+    <TabItem Header="{x:Static properties:Resources.DishesTabTitle}">
       <userControls:DishesUserControl Name="DishesUserControl" />
     </TabItem>
-    <TabItem Header="Sources">
+    <TabItem Header="{x:Static properties:Resources.SourcesTabTitle}">
       <userControls:SourcesUserControl Name="SourcesUserControl" />
     </TabItem>
-    <TabItem Header="Tags">
+    <TabItem Header="{x:Static properties:Resources.TagsTabTitle}">
       <userControls:TagsUserControl Name="TagsUserControl" />
     </TabItem>
   </TabControl>

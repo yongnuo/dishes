@@ -1,3 +1,4 @@
+using System.Globalization;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -8,6 +9,8 @@ namespace Dishes
     {
         public override void Initialize()
         {
+            CultureInfo.CurrentUICulture = new CultureInfo("sv-SE");
+            CultureInfo.CurrentCulture = new CultureInfo("sv-SE");
             AvaloniaXamlLoader.Load(this);
         }
 

@@ -61,6 +61,24 @@ namespace Dishes.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dishes.
+        /// </summary>
+        public static string ApplicationTitle {
+            get {
+                return ResourceManager.GetString("ApplicationTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Really remove dish &quot;{0}&quot;?.
         /// </summary>
         public static string ConfirmRemoveDish {
@@ -84,6 +102,87 @@ namespace Dishes.Properties {
         public static string ConfirmRemoveTag {
             get {
                 return ResourceManager.GetString("ConfirmRemoveTag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comment.
+        /// </summary>
+        public static string DishCommentLabel {
+            get {
+                return ResourceManager.GetString("DishCommentLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dishes.
+        /// </summary>
+        public static string DishesTabTitle {
+            get {
+                return ResourceManager.GetString("DishesTabTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Path.
+        /// </summary>
+        public static string DishPathLabel {
+            get {
+                return ResourceManager.GetString("DishPathLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source.
+        /// </summary>
+        public static string DishSourceLabel {
+            get {
+                return ResourceManager.GetString("DishSourceLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find.
+        /// </summary>
+        public static string FindLabel {
+            get {
+                return ResourceManager.GetString("FindLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Id.
+        /// </summary>
+        public static string IdLabel {
+            get {
+                return ResourceManager.GetString("IdLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string NameLabel {
+            get {
+                return ResourceManager.GetString("NameLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NoOfUsages.
+        /// </summary>
+        public static string NoOfUsages {
+            get {
+                return ResourceManager.GetString("NoOfUsages", resourceCulture);
             }
         }
         
@@ -120,6 +219,24 @@ namespace Dishes.Properties {
         public static string Save {
             get {
                 return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sources.
+        /// </summary>
+        public static string SourcesTabTitle {
+            get {
+                return ResourceManager.GetString("SourcesTabTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tags.
+        /// </summary>
+        public static string TagsTabTitle {
+            get {
+                return ResourceManager.GetString("TagsTabTitle", resourceCulture);
             }
         }
         

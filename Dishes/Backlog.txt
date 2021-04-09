@@ -1,1 +1,11 @@
-﻿
+﻿Översätt till svenska
+
+Lägg in Design-properties (data)
+
+Snygga upp koden kring ListsUserControl
+
+Se över layout och stilar
+
+Kolla Publish-profiles
+
+Radbrytning i dialog
