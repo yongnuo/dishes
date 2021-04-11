@@ -5,9 +5,10 @@
              xmlns:properties="clr-namespace:Dishes.Properties"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Dishes.UserControls.TagsUserControl">
-  <Grid RowDefinitions="Auto,12,Auto,Auto,Auto,Auto,Auto,Auto,*,Auto" ColumnDefinitions="*,*">
+  <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,*,Auto" ColumnDefinitions="*,*">
     <TextBlock Grid.Row="0" Grid.Column="0" Classes="Label" Text="{x:Static properties:Resources.FindLabel}"/>
     <TextBox Grid.Row="0" Grid.Column="1" Classes="Property" Name="SearchBox"/>
+    <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Classes="HorizontalSpacing" />
     <TextBlock Grid.Row="2" Grid.Column="0" Classes="Label" Text="{x:Static properties:Resources.IdLabel}"/>
     <TextBlock Grid.Row="2" Grid.Column="1" Classes="Property" Name="EntityId"/>
     <TextBlock Grid.Row="3" Grid.Column="0" Classes="Label" Text="{x:Static properties:Resources.NameLabel}"/>
@@ -15,9 +16,9 @@
 
     <Button Grid.Row="7" Grid.Column="0" Name="Save" Content="{x:Static properties:Resources.Save}" HorizontalAlignment="Right" Margin="0 0 6 6" />
     <Button Grid.Row="7" Grid.Column="1" Name="Cancel" Content="{x:Static properties:Resources.Cancel}" Margin="0 0 0 6" />
-    <DataGrid Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"
-              Name="Entities" MinHeight="100" MinWidth="800"
-              VerticalScrollBarVisibility="Visible" IsReadOnly="True">
+    <StackPanel Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" Classes="HorizontalSpacing" />
+    <DataGrid Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2"
+              Name="Entities" Classes="Entities">
       <DataGrid.Columns>
         <DataGridTextColumn Header="{x:Static properties:Resources.IdLabel}"
                             MinWidth="30"
@@ -27,7 +28,7 @@
                             Binding="{Binding Name}" />
       </DataGrid.Columns>
     </DataGrid>
-    <TextBlock Grid.Row="9" Grid.Column="0" Name="NoOfEntities" HorizontalAlignment="Left" Margin="12 6 0 0" />
-    <Button Grid.Row="9" Grid.Column="1" Name="Delete" Content="{x:Static properties:Resources.Delete}" HorizontalAlignment="Right" Margin="6 6 0 0" />
+    <TextBlock Grid.Row="10" Grid.Column="0" Name="NoOfEntities" HorizontalAlignment="Left" Margin="12 6 0 0" />
+    <Button Grid.Row="10" Grid.Column="1" Name="Delete" Content="{x:Static properties:Resources.Delete}" HorizontalAlignment="Right" Margin="6 6 0 0" />
   </Grid>
 </UserControl>
