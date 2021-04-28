@@ -19,9 +19,15 @@ namespace Dishes
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 desktop.MainWindow = new MainWindow();
+                
             }
 
             base.OnFrameworkInitializationCompleted();
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop2)
+            {
+                var window = (MainWindow) desktop2.MainWindow;
+                window.Initialize();
+            }
         }
     }
 }

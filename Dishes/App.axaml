@@ -1,6 +1,7 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             xmlns:models="clr-namespace:Dishes.Models"
              x:Class="Dishes.App">
   <Application.Resources>
     <system:Double x:Key="MainFontSize">12</system:Double>
@@ -8,12 +9,24 @@
     <system:Double x:Key="MainPropertiesWidth">300</system:Double>
       
   </Application.Resources>
+    <Application.DataTemplates>
+        <DataTemplate DataType="models:Dish">
+            <TextBox Text="{Binding Name}"></TextBox>
+        </DataTemplate>
+    </Application.DataTemplates>
   <Application.Styles>
     <FluentTheme Mode="Light"/>
     <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>
     <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml"/>
     <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Default.xaml"/>
     <StyleInclude Source="avares://AvaloniaTools/Styles/CustomStyles.xaml"/>
+    <Style>
+        <Style.Resources>
+            <DataTemplate x:Key="Test">
+                <TextBox Text="{Binding Name}"></TextBox>
+            </DataTemplate>
+        </Style.Resources>
+    </Style>
     <Style Selector="TextBlock.Label">
       <Setter Property="HorizontalAlignment" Value="Right" />
       <Setter Property="VerticalAlignment" Value="Center" />

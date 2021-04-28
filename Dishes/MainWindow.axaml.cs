@@ -11,9 +11,10 @@ namespace Dishes
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly Service _service;
 
-        private SourcesUserControl SourcesUserControl { get; }
-        private DishesUserControl DishesUserControl { get; }
-        private TagsUserControl TagsUserControl { get; }
+        private ListBaseUserControl Sources { get; }
+        private ListBaseUserControl DishesUserControl { get; }
+        //private TagsUserControl TagsUserControl { get; }
+        private ListBaseUserControl Tags { get; }
 
         public MainWindow()
         {
@@ -24,16 +25,22 @@ namespace Dishes
 #if DEBUG
             this.AttachDevTools();
 #endif
-            DishesUserControl = (DishesUserControl)this.FindControl<UserControl>("DishesUserControl");
-            SourcesUserControl = (SourcesUserControl)this.FindControl<UserControl>("SourcesUserControl");
-            TagsUserControl = (TagsUserControl)this.FindControl<UserControl>("TagsUserControl");
-            DishesUserControl.Initialize(_service);
-            SourcesUserControl.Initialize(_service);
-            TagsUserControl.Initialize(_service);
+            DishesUserControl = (ListBaseUserControl) this.FindControl<UserControl>("Dishes");
+            Sources = (ListBaseUserControl) this.FindControl<UserControl>("Sources");
+            //TagsUserControl = (TagsUserControl) this.FindControl<UserControl>("TagsUserControl");
+            Tags = (ListBaseUserControl) this.FindControl<UserControl>("Tags");
 
-            SourcesUserControl.SourcesUpdated += DishesUserControl.ReloadSources;
-            DishesUserControl.DishesUpdated += SourcesUserControl.UpdateEntityList;
-            TagsUserControl.TagsUpdated += DishesUserControl.ReloadTags;
+        }
+
+        public void Initialize()
+        {
+            DishesUserControl.Initialize(_service, new DishesList());
+            Sources.Initialize(_service, new SourcesList());
+            Tags.Initialize(_service, new TagsList());
+
+            //Sources.Updated += DishesUserControl.ReloadSources;
+            //DishesUserControl.DishesUpdated += Sources.UpdateEntityList;
+            //Tags.Updated += DishesUserControl.ReloadTags;
         }
 
         private void InitializeComponent()

@@ -3,19 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
 using Avalonia.Input;
+using Avalonia.Markup.Xaml;
+using AvaloniaTools.Enums;
+using AvaloniaTools.Tools;
+using AvaloniaTools.Windows;
 using Dishes.Interfaces;
 using Dishes.Services;
 using Dishes.Tools;
 
 namespace Dishes.UserControls
 {
-    public abstract class ListsUserControl<T> : UserControl where T : IDbEntity
+    public class ListBaseUserControl : UserControl
     {
-        protected Service Service;
+        public event Action Updated = delegate { };
 
-        protected readonly QueueHandler QueueHandler;
-        private List<T> _filteredEntities;
+        private IList _list;
+        private Service _service;
+        private readonly QueueHandler _queueHandler;
+        private List<IDbEntity> _filteredEntities;
         private string _searchText;
 
         // ReSharper disable once UnusedAutoPropertyAccessor.Local
@@ -23,33 +30,23 @@ namespace Dishes.UserControls
         private TextBlock EntityId { get; set; }
         private DataGrid Entities { get; set; }
         private TextBlock NoOfEntities { get; set; }
+        private ContentPresenter EditFields { get; set; }
 
         private Button SaveButton { get; set; }
         private Button CancelButton { get; set; }
-        protected Button DeleteButton { get; set; }
+        private Button DeleteButton { get; set; }
 
-        protected abstract void SetupAdditionalGuiControls();
-        protected abstract void InitializeAdditionalGuiData();
-        protected abstract void SetupAdditionalEvents();
-        protected abstract void SetInputFields(T selectedEntity);
-        protected abstract void FocusPrimaryEditField();
-        protected abstract T AddEntity();
-        protected abstract T UpdateEntity();
-        protected abstract void ClearAdditionalInputFields();
-        protected abstract List<T> GetData();
-        protected abstract void InitializeComponent();
-        protected abstract Task DeleteEntity();
-
-
-        protected ListsUserControl()
+        public ListBaseUserControl()
         {
-            QueueHandler = new QueueHandler(UpdateEntityList);
-
-            // ReSharper disable once VirtualMemberCallInConstructor
-            InitializeComponent();
+            _queueHandler = new QueueHandler(UpdateEntityList);
             _searchText = string.Empty;
 
-            
+            InitializeComponent();
+        }
+
+        private void InitializeComponent()
+        {
+            AvaloniaXamlLoader.Load(this);
         }
 
         private void SetupGuiControls()
@@ -61,16 +58,30 @@ namespace Dishes.UserControls
             SaveButton = this.FindControl<Button>("Save");
             CancelButton = this.FindControl<Button>("Cancel");
             DeleteButton = this.FindControl<Button>("Delete");
+            EditFields = this.FindControl<ContentPresenter>("EditFields");
             DeleteButton.IsEnabled = false;
+            
+            EditFields.ContentTemplate = _list.EditDataTemplate();
+            EditFields.Content = _list.CreateDefaultObject();
 
-            SetupAdditionalGuiControls();
+            foreach (var column in _list.DataGridColumns())
+            {
+                Entities.Columns.Add(column);
+            }
         }
 
-        public void Initialize(Service service)
+        private void Update()
         {
+            Updated();
+        }
+
+        public void Initialize(Service service, IList list)
+        {
+            _list = list;
+            _service = service;
+            
             SetupGuiControls();
             SearchBox.AttachedToVisualTree += (s, e) => SearchBox.Focus(); // Verkar ta tid
-            Service = service;
             InitializeGuiData();
             SetupEvents();
         }
@@ -79,18 +90,18 @@ namespace Dishes.UserControls
         private void InitializeGuiData()
         {
             UpdateEntityList();
-            if (GetData().Any())
+            if (_list.GetData(_service).Any())
             {
                 Entities.SelectedIndex = 0;
             }
-            InitializeAdditionalGuiData();
+            //_list.InitializeAdditionalGuiData();
         }
 
         private void SetupEvents()
         {
             SearchBox.KeyDown += HandleSearchKeyDown;
 
-            SearchBox.GotFocus += SelectTextOnFocus;
+            SearchBox.GotFocus += TextBoxTools.SelectTextOnFocus;
             Entities.DoubleTapped += (s, e) => LoadSelectedEntity();
             SearchBox.PropertyChanged += (s, e) =>
             {
@@ -99,14 +110,14 @@ namespace Dishes.UserControls
                 if (SearchBox.Text != _searchText)
                 {
                     _searchText = SearchBox.Text;
-                    QueueHandler.Trigger(_searchText);
+                    _queueHandler.Trigger(_searchText);
                 }
             };
             SaveButton.Click += (s, e) => SaveOrUpdate();
             CancelButton.Click += (s, e) => ClearInputFields();
             DeleteButton.Click += async (s, e) => await Delete();
 
-            SetupAdditionalEvents();
+            _list.SetupAdditionalEvents(Update);
         }
 
         protected void HandleEditKeyDown(object sender, KeyEventArgs e)
@@ -121,14 +132,6 @@ namespace Dishes.UserControls
                     SaveOrUpdate();
                     break;
             }
-        }
-
-        protected void SelectTextOnFocus(object sender, GotFocusEventArgs e)
-        {
-            if (!(sender is TextBox textBox))
-                return;
-            textBox.SelectionStart = 0;
-            textBox.SelectionEnd = textBox.Text?.Length ?? 0;
         }
 
         private void HandleSearchKeyDown(object sender, KeyEventArgs e)
@@ -155,22 +158,21 @@ namespace Dishes.UserControls
             if (Entities.SelectedIndex == -1)
             {
                 throw new InvalidOperationException("No entity selected");
-                //DeleteButton.IsEnabled = false;
-                //return;
             }
 
-            var selectedEntity = (T)Entities.SelectedItem;
+            var selectedEntity = (IDbEntity)Entities.SelectedItem;
+            EditFields.Content = selectedEntity;
             EntityId.Text = selectedEntity.Id.ToString();
             SaveButton.Content = Properties.Resources.Update;
             DeleteButton.IsEnabled = true;
-            SetInputFields(selectedEntity);
-            FocusPrimaryEditField();
+            //_list.SetInputFields(selectedEntity);
+            _list.FocusPrimaryEditField();
         }
 
 
         private void SaveOrUpdate()
         {
-            var entity = GetEntityId() == -1 ? AddEntity() : UpdateEntity();
+            var entity = GetEntityId() == -1 ? _list.AddEntity(_service) : _list.UpdateEntity(GetEntityId(), _service);
             Entities.SelectedItem = entity;
             UpdateEntityList();
             ClearInputFields();
@@ -179,19 +181,25 @@ namespace Dishes.UserControls
 
         private async Task Delete()
         {
-            var selectedIndex = Entities.SelectedIndex;
-            await DeleteEntity();
-            UpdateEntityList();
-            ClearInputFields();
-            if (selectedIndex >= GetData().Count)
-                selectedIndex--;
-            if (selectedIndex < 0)
-                selectedIndex = 0;
-            Entities.SelectedIndex = selectedIndex;
-            SearchBox.Focus();
+            var entityId = GetEntityId();
+            var dialog = new ButtonDialog(ButtonEnum.OkCancel, _list.RemoveHeader,
+                _list.ConfirmRemoveCaption(entityId, _service));
+            if (await dialog.Open() == ButtonResult.Ok)
+            {
+                var selectedIndex = Entities.SelectedIndex;
+                _list.DeleteEntity(entityId, _service);
+                UpdateEntityList();
+                ClearInputFields();
+                if (selectedIndex >= _list.GetData(_service).Count)
+                    selectedIndex--;
+                if (selectedIndex < 0)
+                    selectedIndex = 0;
+                Entities.SelectedIndex = selectedIndex;
+                SearchBox.Focus();
+            }
         }
 
-        protected int GetEntityId()
+        private int GetEntityId()
         {
             if (string.IsNullOrWhiteSpace(EntityId.Text))
                 return -1;
@@ -201,19 +209,20 @@ namespace Dishes.UserControls
         private void ClearInputFields()
         {
             EntityId.Text = string.Empty;
+            EditFields.Content = _list.CreateDefaultObject();
             DeleteButton.IsEnabled = false;
             SaveButton.Content = Properties.Resources.Save;
-            ClearAdditionalInputFields();
+            //_list.ClearAdditionalInputFields();
             SearchBox.Focus();
         }
 
         public void UpdateEntityList()
         {
-            var selectedEntity = (T)Entities.SelectedItem;
-            var items = GetData();
+            var selectedEntity = (IDbEntity)Entities.SelectedItem;
+            var items = _list.GetData(_service);
             _filteredEntities = items.Where(d =>
                 d.Name.Contains(_searchText, StringComparison.CurrentCultureIgnoreCase)).ToList();
-            _filteredEntities = PerformAdditionalFiltering(_filteredEntities);
+            _filteredEntities = _list.PerformAdditionalFiltering(_filteredEntities);
             Entities.Items = _filteredEntities;
             if (_filteredEntities.Contains(selectedEntity))
                 Entities.SelectedItem = selectedEntity;
@@ -221,7 +230,5 @@ namespace Dishes.UserControls
                 Entities.SelectedIndex = 0;
             NoOfEntities.Text = $"{_filteredEntities.Count} / {items.Count}";
         }
-
-        protected abstract List<T> PerformAdditionalFiltering(List<T> filteredEntities);
     }
 }

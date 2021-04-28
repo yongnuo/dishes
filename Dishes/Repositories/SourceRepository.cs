@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Dishes.Extensions;
+using Dishes.Interfaces;
 using Dishes.Models;
 using Microsoft.Data.Sqlite;
 
@@ -14,7 +15,7 @@ namespace Dishes.Repositories
             _connectionString = connectionString;
         }
 
-        public List<Source> LoadSources()
+        public List<IDbEntity> LoadSources()
         {
             using var connection = new SqliteConnection(_connectionString);
             connection.Open();
@@ -22,7 +23,7 @@ namespace Dishes.Repositories
             var command = connection.CreateCommand();
             command.CommandText =
                 @"select * from sources";
-            var sources = new List<Source>();
+            var sources = new List<IDbEntity>();
             using var reader = command.ExecuteReader();
             while (reader.Read())
             {

@@ -5,12 +5,13 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
+using Dishes.Services;
 
 namespace Dishes.Tools
 {
     public class QueueHandler
     {
-        private const string LogfileTxt = @"C:\Code\Dishes\Dishes\bin\Debug\net5.0\logfile.txt";
+        private static readonly string LogfileTxt = AppSettingsService.Instance.QueueHandlerLogFile;
         private readonly Action _filterGui;
         private readonly ConcurrentQueue<string> _queue;
         // ReSharper disable once CollectionNeverQueried.Global

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Dishes.Interfaces;
 using Dishes.Models;
 using Dishes.Repositories;
 
@@ -11,9 +12,9 @@ namespace Dishes.Services
         private readonly DishRepository _dishRepository;
         private readonly SourceRepository _sourceRepository;
         private readonly TagRepository _tagRepository;
-        public List<Source> Sources { get; private set; }
-        public List<Dish> Dishes { get; private set; }
-        public List<Tag> Tags { get; set; }
+        public List<IDbEntity> Sources { get; private set; }
+        public List<IDbEntity> Dishes { get; private set; }
+        public List<IDbEntity> Tags { get; set; }
 
 
         public Service()
@@ -22,11 +23,11 @@ namespace Dishes.Services
             var dbMigrationService = new DbMigrationService(connectionString);
             dbMigrationService.VerifySchema();
             _dishRepository = new DishRepository(connectionString);
-            Dishes = new List<Dish>();
+            Dishes = new List<IDbEntity>();
             _sourceRepository = new SourceRepository(connectionString);
-            Sources = new List<Source>();
+            Sources = new List<IDbEntity>();
             _tagRepository = new TagRepository(connectionString);
-            Tags = new List<Tag>();
+            Tags = new List<IDbEntity>();
         }
 
         public void LoadAll()
@@ -38,12 +39,13 @@ namespace Dishes.Services
             SortDishes();
             SortSources();
             SortTags();
-            foreach (var dish in Dishes)
+            foreach (var dbEntity in Dishes)
             {
-                dish.Source = Sources.First(s => s.Id == dish.SourceId);
+                var dish = (Dish) dbEntity;
+                dish.Source = (Source)Sources.First(s => s.Id == dish.SourceId);
                 dish.Tags = dishTags
                     .Where(dt => dt.DishId == dish.Id)
-                    .Select(dt => Tags.First(t => t.Id == dt.TagId))
+                    .Select(dt => (Tag)Tags.First(t => t.Id == dt.TagId))
                     .ToList();
             }
         }

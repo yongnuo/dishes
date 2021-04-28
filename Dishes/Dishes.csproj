@@ -4,8 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Nullable>disable</Nullable>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <DebugType>None</DebugType>
-    <DebugSymbols>false</DebugSymbols>
+    <!--<DebugType>None</DebugType>
+    <DebugSymbols>false</DebugSymbols>-->
     <ApplicationIcon>Assets/dishes.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
@@ -32,11 +32,19 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Update="UserControls\ListBaseUserControl.axaml.cs">
+      <DependentUpon>ListBaseUserControl.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

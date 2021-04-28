@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Dishes.Extensions;
+using Dishes.Interfaces;
 using Dishes.Models;
 using Microsoft.Data.Sqlite;
 
@@ -14,14 +15,14 @@ namespace Dishes.Repositories
             _connectionString = connectionString;
         }
 
-        public List<Tag> LoadTags()
+        public List<IDbEntity> LoadTags()
         {
             using var connection = new SqliteConnection(_connectionString);
             connection.Open();
             var command = connection.CreateCommand();
             command.CommandText =
                 @"select * from tags";
-            var tags = new List<Tag>();
+            var tags = new List<IDbEntity>();
             using var reader = command.ExecuteReader();
             while (reader.Read())
             {

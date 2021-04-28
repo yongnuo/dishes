@@ -32,15 +32,22 @@ namespace Dishes.Services
         {
             private const string DefaultDbFileName = "dishes.db";
             private const string DbFileNameKey = "dbFileName";
+            
+            private const string DefaultQueueHandlerLogFile = "queueHandlerLog.txt";
+            private const string QueueHandlerLogFileKey = "queueHandlerLogFile";
 
             public AppSettings(IConfiguration configuration)
             {
                 ConnectionString = configuration.GetSection(DbFileNameKey).Value != null
                     ? configuration.GetSection(DbFileNameKey).Value
                     : DefaultDbFileName;
+                QueueHandlerLogFile = configuration.GetSection(QueueHandlerLogFileKey).Value != null
+                    ? configuration.GetSection(QueueHandlerLogFileKey).Value
+                    : Path.Combine(Directory.GetCurrentDirectory(), DefaultQueueHandlerLogFile);
             }
 
             public string ConnectionString { get; }
+            public string QueueHandlerLogFile { get; }
         }
     }
 }
